@@ -7,7 +7,6 @@ namespace MechMK1.DungeonLib
 {
 	public class Tile
 	{
-		private static Random r = new Random();
 		private static char[] syms = new char[]
 		{
 			'o',
@@ -72,7 +71,7 @@ namespace MechMK1.DungeonLib
 
 		private Doors GetRandomDoors()
 		{
-			return (Doors)r.Next(1, 16);
+			return (Doors)Util.Random.Next(1, 16);
 		}
 	}
 }
