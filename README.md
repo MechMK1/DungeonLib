@@ -1,4 +1,4 @@
-# dungeonlib
+# DungeonLib
 ## Overview
 DungeonLib aims to help developers create randomly-generated levels for games.
 As these levels, or dungeons, are not bound to any form of display method, they can be used for ASCII-style graphics, up to 3D games.
