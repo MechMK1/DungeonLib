@@ -10,7 +10,7 @@ namespace MechMK1.DungeonLib.TestClient
 	{
 		static void Main(string[] args)
 		{
-			Dungeon d = Dungeon.Create(15, 5);
+			Dungeon d = Dungeon.Create(15, 50);
 			DisplayDungeon(d);
 		}
 
@@ -21,7 +21,7 @@ namespace MechMK1.DungeonLib.TestClient
 				for (int w = 0; w < d.Tiles.GetLength(0); w++)
 				{
 					Tile t = d.Tiles[w, h];
-					char toDraw = (t == null) ? ' ' : t.Symbol;
+					char toDraw = (t == null) ? ' ' : (t.MetaSymbol ?? t.Symbol);
 					Console.Write(toDraw);
 				}
 				Console.WriteLine();
