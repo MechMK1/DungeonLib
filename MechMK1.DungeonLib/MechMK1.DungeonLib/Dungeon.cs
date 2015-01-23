@@ -83,20 +83,85 @@ namespace MechMK1.DungeonLib
 			{
 				if ((data & 1) == 1)
 				{
-					
+					Tile adj;
 					switch ((Doors)mask)
 					{
 						case Doors.Up:
-							ProcessDoor(Doors.Up, ()=>(t.Y == 0), Tuple.Create<int, int>(t.X, t.Y - 1), t);
+							if (t.Y == 0)
+							{
+								t.Doors &= ~Doors.Up; //Remove up since we are already on the top
+								break;
+							}
+
+							if ((adj = Tiles[t.X, t.Y - 1]) == null)
+							{
+								adj = new Tile();
+								adj.Doors |= Doors.Down;
+								SetTile(adj, t.X, t.Y - 1);
+								ProcessTile(adj);
+							}
+							else
+							{
+								adj.Doors |= Doors.Down;
+							}
 							break;
+
 						case Doors.Right:
-							ProcessDoor(Doors.Right, () => (t.X == Tiles.GetLength(0) - 1), Tuple.Create<int, int>(t.X + 1, t.Y), t);
+							if (t.X == Tiles.GetLength(0) - 1)
+							{
+								t.Doors &= ~Doors.Right; //Remove up since we are already on the top
+								break;
+							}
+
+							if ((adj = Tiles[t.X + 1, t.Y]) == null)
+							{
+								adj = new Tile();
+								adj.Doors |= Doors.Left;
+								SetTile(adj, t.X + 1, t.Y);
+								ProcessTile(adj);
+							}
+							else
+							{
+								adj.Doors |= Doors.Left;
+							}
 							break;
 						case Doors.Down:
-							ProcessDoor(Doors.Down, () => (t.Y == Tiles.GetLength(1) - 1), Tuple.Create<int, int>(t.X, t.Y + 1), t);
+							if (t.Y == Tiles.GetLength(1) - 1)
+							{
+								t.Doors &= ~Doors.Down; //Remove up since we are already on the top
+								break;
+							}
+
+							if ((adj = Tiles[t.X, t.Y + 1]) == null)
+							{
+								adj = new Tile();
+								adj.Doors |= Doors.Up;
+								SetTile(adj, t.X, t.Y + 1);
+								ProcessTile(adj);
+							}
+							else
+							{
+								adj.Doors |= Doors.Up;
+							}
 							break;
 						case Doors.Left:
-							ProcessDoor(Doors.Down, () => (t.X == 0), Tuple.Create<int, int>(t.X - 1, t.Y), t);
+							if (t.X == 0)
+							{
+								t.Doors &= ~Doors.Left; //Remove up since we are already on the top
+								break;
+							}
+
+							if ((adj = Tiles[t.X - 1, t.Y]) == null)
+							{
+								adj = new Tile();
+								adj.Doors |= Doors.Right;
+								SetTile(adj, t.X - 1, t.Y);
+								ProcessTile(adj);
+							}
+							else
+							{
+								adj.Doors |= Doors.Right;
+							}
 							break;
 						default:
 							throw new ArgumentException("I kinda fucked up here");
@@ -105,28 +170,6 @@ namespace MechMK1.DungeonLib
 
 				mask <<= 1;
 				data >>= 1;
-			}
-		}
-
-		private void ProcessDoor(Doors door, Func<bool> endReached, Tuple<int, int> coords, Tile t)
-		{
-			Tile adj;
-			if (endReached())
-			{
-				t.Doors &= ~door; //Remove up since we are already on the top
-				return;
-			}
-
-			if ((adj = Tiles[coords.Item1, coords.Item2]) == null)
-			{
-				adj = new Tile();
-				adj.Doors |= Util.GetOpposite(door);
-				SetTile(adj, coords.Item1, coords.Item2);
-				ProcessTile(adj);
-			}
-			else
-			{
-				adj.Doors |= Util.GetOpposite(door);
 			}
 		}
 		private void SetTile(Tile tile, int x, int y)
