@@ -22,14 +22,17 @@ namespace MechMK1.DungeonLib
 		/// Enables various debugging options
 		/// </summary>
 		private static bool debug =
-								#if DEBUG
-									true;
-								#else
+#if DEBUG
+ true;
+
+#else
 									false;
-								#endif
+#endif
+
 		#endregion Private Fields
 
 		#region Internal Methods
+
 		/// <summary>
 		/// Returns the opposite direction.
 		/// E.g. Up/Down, Left/Right
@@ -56,7 +59,7 @@ namespace MechMK1.DungeonLib
 					throw new ArgumentException("door", "Invalid value for parameter");
 			}
 		}
-		#endregion Internal Methods
 
+		#endregion Internal Methods
 	}
 }

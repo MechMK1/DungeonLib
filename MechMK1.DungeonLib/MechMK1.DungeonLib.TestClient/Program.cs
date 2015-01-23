@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MechMK1.DungeonLib.TestClient
 {
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
 			Dungeon d = Dungeon.Create(15, 50);
 			DisplayDungeon(d);

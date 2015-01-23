@@ -2,7 +2,6 @@
 {
 	public class Tile
 	{
-
 		#region Private Fields
 
 		/// <summary>
@@ -46,7 +45,6 @@
 
 		#endregion Public Constructors
 
-
 		#region Public Properties
 
 		/// <summary>
@@ -79,7 +77,6 @@
 		public int Y { get; internal set; } //TODO Implement TileMap class to unify this
 
 		#endregion Public Properties
-
 
 		#region Public Methods
 

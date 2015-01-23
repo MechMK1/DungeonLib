@@ -41,7 +41,6 @@ namespace MechMK1.DungeonLib
 
 		#endregion Private Constructors
 
-
 		#region Public Properties
 
 		public Tile[,] Tiles { get; private set; }
@@ -239,6 +238,7 @@ namespace MechMK1.DungeonLib
 			tile.X = x;
 			tile.Y = y;
 		}
+
 		#endregion Helpers
 	}
 }
