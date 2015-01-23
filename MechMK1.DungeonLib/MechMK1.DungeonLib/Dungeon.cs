@@ -90,9 +90,7 @@ namespace MechMK1.DungeonLib
 							if (t.Y == 0)
 							{
 								t.Doors &= ~Doors.Up; //Remove up since we are already on the top
-								mask <<= 1;
-								data >>= 1;
-								continue; //Next direction since this is done.
+								break;
 							}
 
 							if ((adj = Tiles[t.X, t.Y - 1]) == null)
@@ -112,9 +110,7 @@ namespace MechMK1.DungeonLib
 							if (t.X == Tiles.GetLength(0) - 1)
 							{
 								t.Doors &= ~Doors.Right; //Remove up since we are already on the top
-								mask <<= 1;
-								data >>= 1;
-								continue; //Next direction since this is done.
+								break;
 							}
 
 							if ((adj = Tiles[t.X + 1, t.Y]) == null)
@@ -133,9 +129,7 @@ namespace MechMK1.DungeonLib
 							if (t.Y == Tiles.GetLength(1) - 1)
 							{
 								t.Doors &= ~Doors.Down; //Remove up since we are already on the top
-								mask <<= 1;
-								data >>= 1;
-								continue; //Next direction since this is done.
+								break;
 							}
 
 							if ((adj = Tiles[t.X, t.Y + 1]) == null)
@@ -154,9 +148,7 @@ namespace MechMK1.DungeonLib
 							if (t.X == 0)
 							{
 								t.Doors &= ~Doors.Left; //Remove up since we are already on the top
-								mask <<= 1;
-								data >>= 1;
-								continue; //Next direction since this is done.
+								break;
 							}
 
 							if ((adj = Tiles[t.X - 1, t.Y]) == null)
