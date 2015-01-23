@@ -23,6 +23,23 @@ namespace MechMK1.DungeonLib
 		/// <summary>
 		/// Static r
 		/// </summary>
-		internal static readonly Random Random = debug ? new Random(1) : new Random(); 
+		internal static readonly Random Random = debug ? new Random(1) : new Random();
+
+		internal static Doors GetOpposite(Doors door)
+		{
+			switch (door)
+			{
+				case Doors.Up:
+					return Doors.Down;
+				case Doors.Right:
+					return Doors.Left;
+				case Doors.Down:
+					return Doors.Up;
+				case Doors.Left:
+					return Doors.Right;
+				default:
+					throw new ArgumentException("door", "Invalid value for parameter");
+			}	
+		}
 	}
 }
