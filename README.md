@@ -45,3 +45,6 @@ A two-dimensional array called `Tiles` will represent the "map" of the dungeon
       </tr>
     </tbody>
    </table>
+
+ - Why LGPL as license?  
+   I personally do believe in Open-Source licenses, but even more, I believe that a library should be as open and widely accessible as possible. Imagine, some young developer decides to make a neat dungeon crawler and uses my DungeonLib to generate new dungeons every level. If this young dev wishes to publish this game on Steam, the LGPL license will allow them to keep their source closed and actually make some profit, which may in turn lead to more games.
