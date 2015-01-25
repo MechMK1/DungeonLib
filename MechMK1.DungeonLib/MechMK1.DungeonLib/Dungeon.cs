@@ -6,7 +6,7 @@ namespace MechMK1.DungeonLib
 	/// <summary>
 	/// Represents an entire dungeon with all tiles and their coordinates
 	/// </summary>
-	public class Dungeon
+	public class Dungeon<T> where T : Tile, new()
 	{
 		#region Private Constructors
 
@@ -18,16 +18,16 @@ namespace MechMK1.DungeonLib
 		private Dungeon(int width, int height)
 		{
 			//Initialize tiles.
-			this.Tiles = new TileMap<Tile>(width, height);
+			this.Tiles = new TileMap<T>(width, height);
 
 			//Pick the middle or one of the middle tiles
 			Tuple<int, int> middle = this.GetMiddleTile(width, height);
 
 			//Make initial tile
-			Tile tmp = new Tile();
+			T tmp = new T();
 
 			//Mark tile as StartTile
-			tmp.MetaSymbol = 'S';
+			tmp.TileInfo.Navigation = NavigationTile.Start;
 
 			//Put the tile on the map
 			this.Tiles[middle.Item1, middle.Item2] = tmp; ;
@@ -43,7 +43,7 @@ namespace MechMK1.DungeonLib
 		
 		#region Public Properties
 
-		public TileMap<Tile> Tiles { get; private set; }
+		public TileMap<T> Tiles { get; private set; }
 
 		#endregion Public Properties
 
@@ -56,12 +56,12 @@ namespace MechMK1.DungeonLib
 		/// <param name="height">Height of the dungeon in tiles. Must be at least 2</param>
 		/// <exception cref="System.ArgumentOutOfRangeException">Thrown when either width or height are less than 2</exception>
 		/// <returns>The newly created Dungeon</returns>
-		public static Dungeon Create(int width, int height)
+		public static Dungeon<T> Create(int width, int height)
 		{
 			if (width < 2) throw new ArgumentOutOfRangeException("width", "Width must be at least 2");
 			if (height < 2) throw new ArgumentOutOfRangeException("height", "Height must be at least 2");
 
-			return new Dungeon(width, height);
+			return new Dungeon<T>(width, height);
 		}
 
 		#endregion Public
@@ -118,7 +118,7 @@ namespace MechMK1.DungeonLib
 		/// <param name="t">Current tile</param>
 		private void ProcessDoor(Doors door, Func<bool> endReached, Tuple<int, int> coords, Tile t)
 		{
-			Tile adj;
+			T adj;
 
 			//If the outer borders of the map were reaches and the door points in this direction
 			if (endReached())
@@ -130,7 +130,7 @@ namespace MechMK1.DungeonLib
 			//If the adjecant tile does not yet exist...
 			if ((adj = Tiles[coords.Item1, coords.Item2]) == null)
 			{
-				adj = new Tile(); //...we create it...
+				adj = new T(); //...we create it...
 				adj.Doors |= Util.GetOpposite(door);//...and ensure they at least have a connection to us
 				this.Tiles[coords.Item1, coords.Item2] = adj; //Then we place it on the map
 				ProcessTile(adj); //And process this tile next
@@ -163,16 +163,18 @@ namespace MechMK1.DungeonLib
 				[
 					Util.Random.Next(endPieces.Count) //Pick one at random
 				]
-				.MetaSymbol = 'E'; // And mark it as the exit
+				.TileInfo.Navigation = NavigationTile.Exit; // And mark it as the exit
 			}
 			else //If no end pieces were found (e.g. the outter walls were a large ring structure), pick pieces at random
 			{
 				Tile end = null;
-				while (end == null || end.MetaSymbol != 'S') //Do this as long as you find null's or the start
+				do
 				{
 					end = this.Tiles[Util.Random.Next(Tiles.Width), Util.Random.Next(Tiles.Height)]; // Select a random tile
-				}
-				end.MetaSymbol = 'E';
+				} while (end == null || end.TileInfo.IsStart); //If tile is empty or tile is start, repeat
+
+				
+				end.TileInfo.Navigation = NavigationTile.Exit;
 			}
 		}
 

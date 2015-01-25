@@ -6,18 +6,24 @@ namespace MechMK1.DungeonLib.TestClient
 	{
 		private static void Main(string[] args)
 		{
-			
+			Dungeon<ASCIITile> d = Dungeon<ASCIITile>.Create(10, 10);
+			DisplayDungeon(d);
 		}
 
-		public static void DisplayDungeon(Dungeon d)
+		public static void DisplayDungeon(Dungeon<ASCIITile> d)
 		{
+			for (int h = 0; h < d.Tiles.Height; h++)
+			{
+				
+			}
+
 			for (int h = 0; h < d.Tiles.Height; h++)
 			{
 				for (int w = 0; w < d.Tiles.Width; w++)
 				{
-					Tile t = d.Tiles[w, h];
-					char toDraw = (t == null) ? ' ' : (t.MetaSymbol ?? t.Symbol);
-					Console.Write(toDraw);
+					ASCIITile t = d.Tiles[w, h];
+					if (t != null) t.Draw();
+					else Console.Write(' ');
 				}
 				Console.WriteLine();
 			}

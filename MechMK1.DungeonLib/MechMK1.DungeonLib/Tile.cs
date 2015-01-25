@@ -1,38 +1,7 @@
 ﻿namespace MechMK1.DungeonLib
 {
-	public class Tile
+	public abstract class Tile
 	{
-		#region Private Fields
-
-		/// <summary>
-		/// Assign each combination of doors a character from the Unicode border characters. I.e. Up and Right are represented by '└'
-		/// </summary>
-		private static char[] syms = new char[]
-		{
-			'o',
-			'o',
-			'└',
-			'o',
-			'│',
-			'┌',
-			'├',
-			'o',
-			'┘',
-			'─',
-			'┴',
-			'┐',
-			'┤',
-			'┬',
-			'┼'
-		};
-
-		/// <summary>
-		/// A Flag-field indicating which doors a tile has
-		/// </summary>
-		private Doors doors;
-
-		#endregion Private Fields
-
 		#region Public Constructors
 
 		/// <summary>
@@ -41,6 +10,7 @@
 		public Tile()
 		{
 			this.Doors = GetRandomDoors();
+			this.TileInfo = new TileInfo();
 		}
 
 		#endregion Public Constructors
@@ -50,31 +20,22 @@
 		/// <summary>
 		/// Property to access the Doors of a dungeon. The symbols are updated whenever the doors are modified.
 		/// </summary>
-		public Doors Doors
-		{
-			get { return doors; }
-			set { doors = value; UpdateSymbols(); }
-		}
+		public Doors Doors { get; set; }
 
 		/// <summary>
-		/// Character which overrides the normal symbol if set (e.g. Start, Exit, etc...)
+		/// Various information about the content of the tile, e.g. if it is the start tile, etc...
 		/// </summary>
-		public char? MetaSymbol { get; set; }
-
-		/// <summary>
-		/// Character which represents the tile
-		/// </summary>
-		public char Symbol { get; set; } //TODO Change char to something more generic, like IDisplayable or such
+		public TileInfo TileInfo { get; private set; }
 
 		/// <summary>
 		/// Helper property which represents the coordinates of this tile
 		/// </summary>
-		public int X { get; internal set; } //TODO Implement TileMap class to unify this
+		public int X { get; internal set; }
 
 		/// <summary>
 		/// Helper property which represents the coordinates of this tile
 		/// </summary>
-		public int Y { get; internal set; } //TODO Implement TileMap class to unify this
+		public int Y { get; internal set; }
 
 		#endregion Public Properties
 
@@ -107,6 +68,8 @@
 
 		#endregion Public Methods
 
+		public virtual void Draw() { }
+
 		#region Private Methods
 
 		/// <summary>
@@ -118,14 +81,6 @@
 		private Doors GetRandomDoors()
 		{
 			return (Doors)Util.Random.Next(1, 16);
-		}
-
-		/// <summary>
-		/// Set the symbol according to the new set of doors
-		/// </summary>
-		private void UpdateSymbols()
-		{
-			this.Symbol = syms[((byte)this.Doors) - 1];
 		}
 
 		#endregion Private Methods
