@@ -18,7 +18,7 @@ namespace MechMK1.DungeonLib
 		private Dungeon(int width, int height)
 		{
 			//Initialize tiles.
-			this.Tiles = new Tile[width, height];
+			this.Tiles = new TileMap<Tile>(width, height);
 
 			//Pick the middle or one of the middle tiles
 			Tuple<int, int> middle = this.GetMiddleTile(width, height);
@@ -30,7 +30,7 @@ namespace MechMK1.DungeonLib
 			tmp.MetaSymbol = 'S';
 
 			//Put the tile on the map
-			SetTile(tmp, middle.Item1, middle.Item2);
+			this.Tiles[middle.Item1, middle.Item2] = tmp; ;
 
 			//Recursively generate more tiles according to the start doors
 			ProcessTile(tmp); // <--------------------------------------------------------------- The magic happens here
@@ -40,10 +40,10 @@ namespace MechMK1.DungeonLib
 		}
 
 		#endregion Private Constructors
-
+		
 		#region Public Properties
 
-		public Tile[,] Tiles { get; private set; }
+		public TileMap<Tile> Tiles { get; private set; }
 
 		#endregion Public Properties
 
@@ -69,6 +69,47 @@ namespace MechMK1.DungeonLib
 		#region Private Methods
 
 		/// <summary>
+		/// Recursively process a tile
+		/// </summary>
+		/// <param name="t">The currently processed tile</param>
+		private void ProcessTile(Tile t)
+		{
+			byte data = (byte)t.Doors; //A 4-bit combination of the set doors. E.g. 1010 => left, right
+			byte mask = 1;             //The "current" door in the loop
+
+			while (data != 0) // When data was processed 4 times
+			{
+				if ((data & 1) == 1) //If the right-most tile is 1 (set)...
+				{
+					switch ((Doors)mask) //...check the value of mask.
+					{
+						case Doors.Up:
+							ProcessDoor((Doors)mask, () => (t.Y == 0), Tuple.Create<int, int>(t.X, t.Y - 1), t);
+							break;
+
+						case Doors.Right:
+							ProcessDoor((Doors)mask, () => (t.X == Tiles.Width - 1), Tuple.Create<int, int>(t.X + 1, t.Y), t);
+							break;
+
+						case Doors.Down:
+							ProcessDoor((Doors)mask, () => (t.Y == Tiles.Height - 1), Tuple.Create<int, int>(t.X, t.Y + 1), t);
+							break;
+
+						case Doors.Left:
+							ProcessDoor((Doors)mask, () => (t.X == 0), Tuple.Create<int, int>(t.X - 1, t.Y), t);
+							break;
+
+						default:
+							throw new ArgumentException("I kinda fucked up here"); // This should never happen
+					}
+				}
+
+				mask <<= 1;
+				data >>= 1;
+			}
+		}
+
+		/// <summary>
 		/// Recursively process a door. Private function. May only be called by ProcessTile()
 		/// </summary>
 		/// <param name="door">Direction of the door</param>
@@ -91,7 +132,7 @@ namespace MechMK1.DungeonLib
 			{
 				adj = new Tile(); //...we create it...
 				adj.Doors |= Util.GetOpposite(door);//...and ensure they at least have a connection to us
-				SetTile(adj, coords.Item1, coords.Item2); //Then we place it on the map
+				this.Tiles[coords.Item1, coords.Item2] = adj; //Then we place it on the map
 				ProcessTile(adj); //And process this tile next
 			}
 			///Otherwise, an adjecant room exists
@@ -100,48 +141,6 @@ namespace MechMK1.DungeonLib
 				adj.Doors |= Util.GetOpposite(door); //So we ensure that they both are connected
 			}
 		}
-
-		/// <summary>
-		/// Recursively process a tile
-		/// </summary>
-		/// <param name="t">The currently processed tile</param>
-		private void ProcessTile(Tile t)
-		{
-			byte data = (byte)t.Doors; //A 4-bit combination of the set doors. E.g. 1010 => left, right
-			byte mask = 1;             //The "current" door in the loop
-
-			while (data != 0) // When data was processed 4 times
-			{
-				if ((data & 1) == 1) //If the right-most tile is 1 (set)...
-				{
-					switch ((Doors)mask) //...check the value of mask.
-					{
-						case Doors.Up:
-							ProcessDoor((Doors)mask, () => (t.Y == 0), Tuple.Create<int, int>(t.X, t.Y - 1), t);
-							break;
-
-						case Doors.Right:
-							ProcessDoor((Doors)mask, () => (t.X == Tiles.GetLength(0) - 1), Tuple.Create<int, int>(t.X + 1, t.Y), t);
-							break;
-
-						case Doors.Down:
-							ProcessDoor((Doors)mask, () => (t.Y == Tiles.GetLength(1) - 1), Tuple.Create<int, int>(t.X, t.Y + 1), t);
-							break;
-
-						case Doors.Left:
-							ProcessDoor((Doors)mask, () => (t.X == 0), Tuple.Create<int, int>(t.X - 1, t.Y), t);
-							break;
-
-						default:
-							throw new ArgumentException("I kinda fucked up here"); // This should never happen
-					}
-				}
-
-				mask <<= 1;
-				data >>= 1;
-			}
-		}
-
 		/// <summary>
 		/// Finds a suitable piece to create the exit on, then put the exit there
 		/// </summary>
@@ -171,7 +170,7 @@ namespace MechMK1.DungeonLib
 				Tile end = null;
 				while (end == null || end.MetaSymbol != 'S') //Do this as long as you find null's or the start
 				{
-					end = this.Tiles[Util.Random.Next(Tiles.GetLength(0)), Util.Random.Next(Tiles.GetLength(1))]; // Select a random tile
+					end = this.Tiles[Util.Random.Next(Tiles.Width), Util.Random.Next(Tiles.Height)]; // Select a random tile
 				}
 				end.MetaSymbol = 'E';
 			}
@@ -224,19 +223,6 @@ namespace MechMK1.DungeonLib
 					(width / 2) - Util.Random.Next(2), // r.Next(2) returns either 0 or 1
 					(height / 2) - Util.Random.Next(2) // r.Next(2) returns either 0 or 1
 			);
-		}
-
-		/// <summary>
-		/// Helper function which sets a tile on the map and ensures that Tile.X/Y match their respective coordinates
-		/// </summary>
-		/// <param name="tile">Tile to set</param>
-		/// <param name="x">X-coordinate</param>
-		/// <param name="y">Y-coordinate</param>
-		private void SetTile(Tile tile, int x, int y)
-		{
-			this.Tiles[x, y] = tile;
-			tile.X = x;
-			tile.Y = y;
 		}
 
 		#endregion Helpers
