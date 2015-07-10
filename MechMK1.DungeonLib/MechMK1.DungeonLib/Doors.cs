@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MechMK1.DungeonLib
+namespace MechMK1.DungeonLib.Old
 {
 	[Flags]
 	public enum Doors : byte

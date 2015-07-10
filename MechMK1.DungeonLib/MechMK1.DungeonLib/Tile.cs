@@ -1,4 +1,4 @@
-﻿namespace MechMK1.DungeonLib
+﻿namespace MechMK1.DungeonLib.Old
 {
 	public abstract class Tile
 	{

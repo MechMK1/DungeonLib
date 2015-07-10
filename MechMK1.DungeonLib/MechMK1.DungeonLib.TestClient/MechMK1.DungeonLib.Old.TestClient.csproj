@@ -48,9 +48,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MechMK1.DungeonLib\MechMK1.DungeonLib.csproj">
+    <ProjectReference Include="..\MechMK1.DungeonLib\MechMK1.DungeonLib.Old.csproj">
       <Project>{25a02403-379f-4892-b64c-ab1bb8f88dee}</Project>
-      <Name>MechMK1.DungeonLib</Name>
+      <Name>MechMK1.DungeonLib.Old</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

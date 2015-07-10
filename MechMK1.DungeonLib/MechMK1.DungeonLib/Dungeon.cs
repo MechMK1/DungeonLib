@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MechMK1.DungeonLib
+namespace MechMK1.DungeonLib.Old
 {
 	/// <summary>
 	/// Represents an entire dungeon with all tiles and their coordinates

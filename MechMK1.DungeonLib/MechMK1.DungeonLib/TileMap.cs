@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MechMK1.DungeonLib
+namespace MechMK1.DungeonLib.Old
 {
 	public class TileMap<T> : IEnumerable<T> where T : Tile
 	{

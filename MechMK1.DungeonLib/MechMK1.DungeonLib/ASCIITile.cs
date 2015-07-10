@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MechMK1.DungeonLib
+namespace MechMK1.DungeonLib.Old
 {
 	public class ASCIITile : Tile
 	{

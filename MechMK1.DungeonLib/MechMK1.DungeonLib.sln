@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MechMK1.DungeonLib", "MechMK1.DungeonLib\MechMK1.DungeonLib.csproj", "{25A02403-379F-4892-B64C-AB1BB8F88DEE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MechMK1.DungeonLib.Old", "MechMK1.DungeonLib\MechMK1.DungeonLib.Old.csproj", "{25A02403-379F-4892-B64C-AB1BB8F88DEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MechMK1.DungeonLib.TestClient", "MechMK1.DungeonLib.TestClient\MechMK1.DungeonLib.TestClient.csproj", "{66962C6D-0EB0-40EC-964E-8E5EC72F688C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MechMK1.DungeonLib.Old.TestClient", "MechMK1.DungeonLib.TestClient\MechMK1.DungeonLib.Old.TestClient.csproj", "{66962C6D-0EB0-40EC-964E-8E5EC72F688C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

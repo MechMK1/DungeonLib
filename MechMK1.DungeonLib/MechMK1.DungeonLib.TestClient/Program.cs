@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MechMK1.DungeonLib.TestClient
+namespace MechMK1.DungeonLib.Old.TestClient
 {
 	internal class Program
 	{
